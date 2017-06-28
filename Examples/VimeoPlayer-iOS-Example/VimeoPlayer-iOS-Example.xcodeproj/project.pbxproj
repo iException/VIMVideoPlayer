@@ -210,13 +210,16 @@
 				TargetAttributes = {
 					AF87202C1CA44FBD004C752C = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0830;
 					};
 					AF8720401CA44FBD004C752C = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0830;
 						TestTargetID = AF87202C1CA44FBD004C752C;
 					};
 					AF87204B1CA44FBD004C752C = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0830;
 						TestTargetID = AF87202C1CA44FBD004C752C;
 					};
 				};
@@ -420,6 +423,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vimeo.VimeoPlayer-iOS-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "${SRCROOT}/VimeoPlayer-iOS-Example/Bridge.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -432,6 +436,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vimeo.VimeoPlayer-iOS-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "${SRCROOT}/VimeoPlayer-iOS-Example/Bridge.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -443,6 +448,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vimeo.VimeoPlayer-iOS-ExampleTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VimeoPlayer-iOS-Example.app/VimeoPlayer-iOS-Example";
 			};
 			name = Debug;
@@ -455,6 +461,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vimeo.VimeoPlayer-iOS-ExampleTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VimeoPlayer-iOS-Example.app/VimeoPlayer-iOS-Example";
 			};
 			name = Release;
@@ -466,6 +473,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vimeo.VimeoPlayer-iOS-ExampleUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = "VimeoPlayer-iOS-Example";
 				USES_XCTRUNNER = YES;
 			};
@@ -478,6 +486,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vimeo.VimeoPlayer-iOS-ExampleUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = "VimeoPlayer-iOS-Example";
 				USES_XCTRUNNER = YES;
 			};
@@ -502,6 +511,7 @@
 				AF8720571CA44FBD004C752C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		AF8720581CA44FBD004C752C /* Build configuration list for PBXNativeTarget "VimeoPlayer-iOS-ExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -510,6 +520,7 @@
 				AF87205A1CA44FBD004C752C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		AF87205B1CA44FBD004C752C /* Build configuration list for PBXNativeTarget "VimeoPlayer-iOS-ExampleUITests" */ = {
 			isa = XCConfigurationList;
@@ -518,6 +529,7 @@
 				AF87205D1CA44FBD004C752C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

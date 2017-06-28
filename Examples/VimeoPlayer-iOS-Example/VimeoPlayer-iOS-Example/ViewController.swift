@@ -31,7 +31,7 @@ class ViewController: UIViewController, VIMVideoPlayerViewDelegate
     @IBOutlet weak var videoPlayerView: VIMVideoPlayerView!
     @IBOutlet weak var slider: UISlider!
     
-    private var isScrubbing = false
+    fileprivate var isScrubbing = false
     
     override func viewDidLoad()
     {
@@ -43,17 +43,17 @@ class ViewController: UIViewController, VIMVideoPlayerViewDelegate
     
     // MARK: Setup
     
-    private func setupVideoPlayerView()
+    fileprivate func setupVideoPlayerView()
     {
-        self.videoPlayerView.player.looping = true
+        self.videoPlayerView.player.isLooping = true
         self.videoPlayerView.player.disableAirplay()
         self.videoPlayerView.setVideoFillMode(AVLayerVideoGravityResizeAspectFill)
         
         self.videoPlayerView.delegate = self
         
-        if let path = NSBundle.mainBundle().pathForResource("waterfall", ofType: "mp4")
+        if let path = Bundle.main.path(forResource: "waterfall", ofType: "mp4")
         {
-            self.videoPlayerView.player.setURL(NSURL(fileURLWithPath: path))
+            self.videoPlayerView.player.setURL(URL(fileURLWithPath: path))
         }
         else
         {
@@ -61,27 +61,27 @@ class ViewController: UIViewController, VIMVideoPlayerViewDelegate
         }
     }
     
-    private func setupSlider()
+    fileprivate func setupSlider()
     {
-        self.slider.addTarget(self, action: "scrubbingDidStart", forControlEvents: UIControlEvents.TouchDown)
-        self.slider.addTarget(self, action: "scrubbingDidChange", forControlEvents: UIControlEvents.ValueChanged)
-        self.slider.addTarget(self, action: "scrubbingDidEnd", forControlEvents: UIControlEvents.TouchUpInside)
-        self.slider.addTarget(self, action: "scrubbingDidEnd", forControlEvents: UIControlEvents.TouchUpOutside)
+        self.slider.addTarget(self, action: #selector(ViewController.scrubbingDidStart), for: UIControlEvents.touchDown)
+        self.slider.addTarget(self, action: #selector(ViewController.scrubbingDidChange), for: UIControlEvents.valueChanged)
+        self.slider.addTarget(self, action: #selector(ViewController.scrubbingDidEnd), for: UIControlEvents.touchUpInside)
+        self.slider.addTarget(self, action: #selector(ViewController.scrubbingDidEnd), for: UIControlEvents.touchUpOutside)
     }
     
     // MARK: Actions
     
-    @IBAction func didTapPlayPauseButton(sender: UIButton)
+    @IBAction func didTapPlayPauseButton(_ sender: UIButton)
     {
-        if self.videoPlayerView.player.playing
+        if self.videoPlayerView.player.isPlaying
         {
-            sender.selected = true
+            sender.isSelected = true
             
             self.videoPlayerView.player.pause()
         }
         else
         {
-            sender.selected = false
+            sender.isSelected = false
             
             self.videoPlayerView.player.play()
         }
@@ -98,8 +98,7 @@ class ViewController: UIViewController, VIMVideoPlayerViewDelegate
     
     func scrubbingDidChange()
     {
-        guard let duration = self.videoPlayerView.player.player.currentItem?.duration
-            where self.isScrubbing == true else
+        guard let duration = self.videoPlayerView.player.player.currentItem?.duration, self.isScrubbing == true else
         {
             return
         }
@@ -118,15 +117,14 @@ class ViewController: UIViewController, VIMVideoPlayerViewDelegate
     
     // MARK: VIMVideoPlayerViewDelegate
     
-    func videoPlayerViewIsReadyToPlayVideo(videoPlayerView: VIMVideoPlayerView?)
+    func videoPlayerViewIsReady(toPlayVideo videoPlayerView: VIMVideoPlayerView?)
     {
         self.videoPlayerView.player.play()
     }
     
-    func videoPlayerView(videoPlayerView: VIMVideoPlayerView!, timeDidChange cmTime: CMTime)
+    func videoPlayerView(_ videoPlayerView: VIMVideoPlayerView!, timeDidChange cmTime: CMTime)
     {
-        guard let duration = self.videoPlayerView.player.player.currentItem?.duration
-            where self.isScrubbing == false else
+        guard let duration = self.videoPlayerView.player.player.currentItem?.duration, self.isScrubbing == false else
         {
             return
         }

@@ -161,6 +161,7 @@
 				TargetAttributes = {
 					AF871FFD1CA447E5004C752C = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0830;
 					};
 					AF8720071CA447E5004C752C = {
 						CreatedOnToolsVersion = 7.2;
@@ -333,6 +334,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vimeo.VimeoPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -350,6 +352,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vimeo.VimeoPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
