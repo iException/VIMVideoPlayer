@@ -38,6 +38,17 @@ static void *VideoPlayer_PlayerItemPlaybackLikelyToKeepUp = &VideoPlayer_PlayerI
 static void *VideoPlayer_PlayerItemPlaybackBufferEmpty = &VideoPlayer_PlayerItemPlaybackBufferEmpty;
 static void *VideoPlayer_PlayerItemLoadedTimeRangesContext = &VideoPlayer_PlayerItemLoadedTimeRangesContext;
 
+NSString *const VIMVideoPlayerIsReadyToPlayNotification = @"VIMVideoPlayerIsReadyToPlay";
+NSString *const VIMVideoPlayerDidReachEndNotification = @"VIMVideoPlayerDidReachEnd";
+NSString *const VIMVideoPlayerTimeDidChangeNotification = @"VIMVideoPlayerTimeDidChange";
+NSString *const VIMVideoPlayerLoadedTimeRangeDidChangeNotification = @"VIMVideoPlayerLoadedTimeRangeDidChange";
+NSString *const VIMVideoPlayerPlaybackBufferEmptyNotification = @"VIMVideoPlayerPlaybackBufferEmpty";
+NSString *const VIMVideoPlayerPlaybackLikelyToKeepUpNotification = @"VIMVideoPlayerPlaybackLikelyToKeepUp";
+NSString *const VIMVideoPlayerDidFailWithErrorNotification = @"VIMVideoPlayerDidFailWithError";
+NSString *const VIMVideoPlayerNotificationTimeKey = @"time";
+NSString *const VIMVideoPlayerNotificationErrorKey = @"error";
+NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
+
 @interface VIMVideoPlayer ()
 
 @property (nonatomic, strong, readwrite) AVPlayer *player;
@@ -409,6 +420,10 @@ static void *VideoPlayer_PlayerItemLoadedTimeRangesContext = &VideoPlayer_Player
                                          userInfo:@{NSLocalizedDescriptionKey : @"Unable to create AVPlayerItem."}];
         
         [self.delegate videoPlayer:self didFailWithError:error];
+        NSDictionary<NSString *, id> *userInfo = @{
+            VIMVideoPlayerNotificationErrorKey: error,
+        };
+        [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerDidFailWithErrorNotification object:self userInfo:userInfo];
     }
 }
 
@@ -655,6 +670,11 @@ static void *VideoPlayer_PlayerItemLoadedTimeRangesContext = &VideoPlayer_Player
         if ([strongSelf.delegate respondsToSelector:@selector(videoPlayer:timeDidChange:)])
         {
             [strongSelf.delegate videoPlayer:strongSelf timeDidChange:time];
+
+            NSDictionary<NSString *, id> *userInfo = @{
+                VIMVideoPlayerNotificationTimeKey: @(CMTimeGetSeconds(time)),
+            };
+            [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerTimeDidChangeNotification object:strongSelf userInfo:userInfo];
         }
         
     }];
@@ -706,6 +726,7 @@ static void *VideoPlayer_PlayerItemLoadedTimeRangesContext = &VideoPlayer_Player
                     {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [self.delegate videoPlayerIsReadyToPlayVideo:self];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerIsReadyToPlayNotification object:self];
                         });
                     }
                     
@@ -754,6 +775,10 @@ static void *VideoPlayer_PlayerItemLoadedTimeRangesContext = &VideoPlayer_Player
                     {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [self.delegate videoPlayer:self didFailWithError:error];
+                            NSDictionary<NSString *, id> *userInfo = @{
+                                VIMVideoPlayerNotificationErrorKey: error,
+                            };
+                            [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerDidFailWithErrorNotification object:self userInfo:userInfo];
                         });
                     }
                     
@@ -770,6 +795,7 @@ static void *VideoPlayer_PlayerItemLoadedTimeRangesContext = &VideoPlayer_Player
                 dispatch_async(dispatch_get_main_queue(), ^
                 {
                     [self.delegate videoPlayerPlaybackLikelyToKeepUp:self];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerPlaybackLikelyToKeepUpNotification object:self];
                 });
             }
         }
@@ -785,6 +811,7 @@ static void *VideoPlayer_PlayerItemLoadedTimeRangesContext = &VideoPlayer_Player
                     if ([self.delegate respondsToSelector:@selector(videoPlayerPlaybackBufferEmpty:)])
                     {
                         [self.delegate videoPlayerPlaybackBufferEmpty:self];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerPlaybackBufferEmptyNotification object:self];
                     }
                 });
             }
@@ -824,6 +851,10 @@ static void *VideoPlayer_PlayerItemLoadedTimeRangesContext = &VideoPlayer_Player
         if ([self.delegate respondsToSelector:@selector(videoPlayer:loadedTimeRangeDidChange:)])
         {
             [self.delegate videoPlayer:self loadedTimeRangeDidChange:loadedDuration];
+            NSDictionary<NSString *, id> *userInfo = @{
+                VIMVideoPlayerNotificationLoadedDurationKey: @(loadedDuration),
+            };
+            [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerLoadedTimeRangeDidChangeNotification object:self userInfo:userInfo];
         }
     }
     else if (context == VideoPlayer_PlayerExternalPlaybackActiveContext)
@@ -856,6 +887,7 @@ static void *VideoPlayer_PlayerItemLoadedTimeRangesContext = &VideoPlayer_Player
     if ([self.delegate respondsToSelector:@selector(videoPlayerDidReachEnd:)])
     {
         [self.delegate videoPlayerDidReachEnd:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerDidReachEndNotification object:self];
     }
 }
 

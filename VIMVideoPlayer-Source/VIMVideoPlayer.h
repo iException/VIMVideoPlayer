@@ -89,3 +89,14 @@ static const float TimeUpdateInterval = 0.1f;
 - (void)fadeOutVolume;
 
 @end
+
+FOUNDATION_EXPORT NSString *const VIMVideoPlayerIsReadyToPlayNotification;
+FOUNDATION_EXPORT NSString *const VIMVideoPlayerDidReachEndNotification;
+FOUNDATION_EXPORT NSString *const VIMVideoPlayerTimeDidChangeNotification;
+FOUNDATION_EXPORT NSString *const VIMVideoPlayerLoadedTimeRangeDidChangeNotification;
+FOUNDATION_EXPORT NSString *const VIMVideoPlayerPlaybackBufferEmptyNotification;
+FOUNDATION_EXPORT NSString *const VIMVideoPlayerPlaybackLikelyToKeepUpNotification;
+FOUNDATION_EXPORT NSString *const VIMVideoPlayerDidFailWithErrorNotification;
+FOUNDATION_EXPORT NSString *const VIMVideoPlayerNotificationTimeKey;
+FOUNDATION_EXPORT NSString *const VIMVideoPlayerNotificationErrorKey;
+FOUNDATION_EXPORT NSString *const VIMVideoPlayerNotificationLoadedDurationKey;
