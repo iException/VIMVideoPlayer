@@ -413,18 +413,18 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
 
 - (void)reportUnableToCreatePlayerItem
 {
+    NSError *error = [NSError errorWithDomain:kVideoPlayerErrorDomain
+                                         code:0
+                                     userInfo:@{NSLocalizedDescriptionKey : @"Unable to create AVPlayerItem."}];
     if ([self.delegate respondsToSelector:@selector(videoPlayer:didFailWithError:)])
     {
-        NSError *error = [NSError errorWithDomain:kVideoPlayerErrorDomain
-                                             code:0
-                                         userInfo:@{NSLocalizedDescriptionKey : @"Unable to create AVPlayerItem."}];
-        
         [self.delegate videoPlayer:self didFailWithError:error];
-        NSDictionary<NSString *, id> *userInfo = @{
-            VIMVideoPlayerNotificationErrorKey: error,
-        };
-        [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerDidFailWithErrorNotification object:self userInfo:userInfo];
     }
+
+    NSDictionary<NSString *, id> *userInfo = @{
+        VIMVideoPlayerNotificationErrorKey: error,
+    };
+    [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerDidFailWithErrorNotification object:self userInfo:userInfo];
 }
 
 - (void)resetPlayerItemIfNecessary
@@ -666,17 +666,15 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
         {
             return;
         }
-        
+
         if ([strongSelf.delegate respondsToSelector:@selector(videoPlayer:timeDidChange:)])
         {
             [strongSelf.delegate videoPlayer:strongSelf timeDidChange:time];
-
-            NSDictionary<NSString *, id> *userInfo = @{
-                VIMVideoPlayerNotificationTimeKey: @(CMTimeGetSeconds(time)),
-            };
-            [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerTimeDidChangeNotification object:strongSelf userInfo:userInfo];
         }
-        
+        NSDictionary<NSString *, id> *userInfo = @{
+            VIMVideoPlayerNotificationTimeKey: @(CMTimeGetSeconds(time)),
+        };
+        [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerTimeDidChangeNotification object:strongSelf userInfo:userInfo];
     }];
 }
 
@@ -722,13 +720,14 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
                 }
                 case AVPlayerItemStatusReadyToPlay:
                 {
-                    if ([self.delegate respondsToSelector:@selector(videoPlayerIsReadyToPlayVideo:)])
+                    dispatch_async(dispatch_get_main_queue(), ^
                     {
-                        dispatch_async(dispatch_get_main_queue(), ^{
+                        if ([self.delegate respondsToSelector:@selector(videoPlayerIsReadyToPlayVideo:)])
+                        {
                             [self.delegate videoPlayerIsReadyToPlayVideo:self];
-                            [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerIsReadyToPlayNotification object:self];
-                        });
-                    }
+                        }
+                        [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerIsReadyToPlayNotification object:self];
+                    });
                     
                     if (self.isPlaying)
                     {
@@ -771,16 +770,18 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
                     
                     [self reset];
 
-                    if ([self.delegate respondsToSelector:@selector(videoPlayer:didFailWithError:)])
+                    dispatch_async(dispatch_get_main_queue(), ^
                     {
-                        dispatch_async(dispatch_get_main_queue(), ^{
+                        if ([self.delegate respondsToSelector:@selector(videoPlayer:didFailWithError:)])
+                        {
                             [self.delegate videoPlayer:self didFailWithError:error];
-                            NSDictionary<NSString *, id> *userInfo = @{
-                                VIMVideoPlayerNotificationErrorKey: error,
-                            };
-                            [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerDidFailWithErrorNotification object:self userInfo:userInfo];
-                        });
-                    }
+                        }
+
+                        NSDictionary<NSString *, id> *userInfo = @{
+                            VIMVideoPlayerNotificationErrorKey: error,
+                        };
+                        [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerDidFailWithErrorNotification object:self userInfo:userInfo];
+                    });
                     
                     break;
                 }
@@ -789,15 +790,14 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
         else if (newStatus == AVPlayerItemStatusReadyToPlay)
         {
             // When playback resumes after a buffering event, a new ReadyToPlay status is set [RH]
-            
-            if ([self.delegate respondsToSelector:@selector(videoPlayerPlaybackLikelyToKeepUp:)])
+            dispatch_async(dispatch_get_main_queue(), ^
             {
-                dispatch_async(dispatch_get_main_queue(), ^
+                if ([self.delegate respondsToSelector:@selector(videoPlayerPlaybackLikelyToKeepUp:)])
                 {
                     [self.delegate videoPlayerPlaybackLikelyToKeepUp:self];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerPlaybackLikelyToKeepUpNotification object:self];
-                });
-            }
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerPlaybackLikelyToKeepUpNotification object:self];
+            });
         }
     }
     else if (context == VideoPlayer_PlayerItemPlaybackBufferEmpty)
@@ -811,8 +811,8 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
                     if ([self.delegate respondsToSelector:@selector(videoPlayerPlaybackBufferEmpty:)])
                     {
                         [self.delegate videoPlayerPlaybackBufferEmpty:self];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerPlaybackBufferEmptyNotification object:self];
                     }
+                    [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerPlaybackBufferEmptyNotification object:self];
                 });
             }
         }
@@ -851,11 +851,11 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
         if ([self.delegate respondsToSelector:@selector(videoPlayer:loadedTimeRangeDidChange:)])
         {
             [self.delegate videoPlayer:self loadedTimeRangeDidChange:loadedDuration];
-            NSDictionary<NSString *, id> *userInfo = @{
-                VIMVideoPlayerNotificationLoadedDurationKey: @(loadedDuration),
-            };
-            [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerLoadedTimeRangeDidChangeNotification object:self userInfo:userInfo];
         }
+        NSDictionary<NSString *, id> *userInfo = @{
+            VIMVideoPlayerNotificationLoadedDurationKey: @(loadedDuration),
+        };
+        [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerLoadedTimeRangeDidChangeNotification object:self userInfo:userInfo];
     }
     else if (context == VideoPlayer_PlayerExternalPlaybackActiveContext)
     {
@@ -883,12 +883,12 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
         _isAtEndTime = YES;
         self.playing = NO;
     }
-        
+
     if ([self.delegate respondsToSelector:@selector(videoPlayerDidReachEnd:)])
     {
         [self.delegate videoPlayerDidReachEnd:self];
-        [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerDidReachEndNotification object:self];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerDidReachEndNotification object:self];
 }
 
 @end
