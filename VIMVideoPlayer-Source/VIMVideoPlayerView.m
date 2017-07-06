@@ -192,4 +192,12 @@
     }
 }
 
+- (void)videoPlayerPlaybackStalled:(VIMVideoPlayer *)videoPlayer
+{
+    if ([self.delegate respondsToSelector:@selector(videoPlayerViewPlaybackStalled:)])
+    {
+        [self.delegate videoPlayerViewPlaybackStalled:self];
+    }
+}
+
 @end

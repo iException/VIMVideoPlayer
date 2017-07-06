@@ -45,6 +45,7 @@ NSString *const VIMVideoPlayerDidReachEndNotification = @"VIMVideoPlayerDidReach
 NSString *const VIMVideoPlayerTimeDidChangeNotification = @"VIMVideoPlayerTimeDidChange";
 NSString *const VIMVideoPlayerLoadedTimeRangeDidChangeNotification = @"VIMVideoPlayerLoadedTimeRangeDidChange";
 NSString *const VIMVideoPlayerPlaybackBufferEmptyNotification = @"VIMVideoPlayerPlaybackBufferEmpty";
+NSString *const VIMVideoPlayerPlaybackStalledNotification = @"VIMVideoPlayerPlaybackStalled";
 NSString *const VIMVideoPlayerPlaybackLikelyToKeepUpNotification = @"VIMVideoPlayerPlaybackLikelyToKeepUp";
 NSString *const VIMVideoPlayerDidFailWithErrorNotification = @"VIMVideoPlayerDidFailWithError";
 NSString *const VIMVideoPlayerNotificationTimeKey = @"time";
@@ -608,11 +609,16 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
                  forKeyPath:NSStringFromSelector(@selector(loadedTimeRanges))
                     options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                     context:VideoPlayer_PlayerItemLoadedTimeRangesContext];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(playerItemDidPlayToEndTime:)
-                                                 name:AVPlayerItemDidPlayToEndTimeNotification
-                                               object:playerItem];
+
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self
+                           selector:@selector(playerItemDidPlayToEndTime:)
+                               name:AVPlayerItemDidPlayToEndTimeNotification
+                             object:playerItem];
+    [notificationCenter addObserver:self
+                           selector:@selector(playerItemPlaybackStalled:)
+                               name:AVPlayerItemPlaybackStalledNotification
+                             object:playerItem];
 }
 
 - (void)removePlayerItemObservers:(AVPlayerItem *)playerItem
@@ -662,8 +668,10 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
     {
         NSLog(@"Exception removing observer: %@", exception);
     }
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:playerItem];
+
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:playerItem];
+    [notificationCenter removeObserver:self name:AVPlayerItemPlaybackStalledNotification object:playerItem];
 }
 
 #pragma mark - Time Observer
@@ -906,6 +914,21 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
         [self.delegate videoPlayerDidReachEnd:self];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerDidReachEndNotification object:self];
+}
+
+- (void)playerItemPlaybackStalled:(NSNotification *)notification
+{
+    if (notification.object != self.player.currentItem)
+    {
+        return;
+    }
+
+    // NOTE: Should we change the `playing` status?
+    if ([self.delegate respondsToSelector:@selector(videoPlayerPlaybackStalled:)])
+    {
+        [self.delegate videoPlayerPlaybackStalled:self];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerPlaybackStalledNotification object:self];
 }
 
 @end

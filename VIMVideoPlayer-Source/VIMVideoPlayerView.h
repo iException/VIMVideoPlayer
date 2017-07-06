@@ -43,6 +43,7 @@
 - (void)videoPlayerView:(VIMVideoPlayerView *)videoPlayerView didFailWithError:(NSError *)error;
 - (void)videoPlayerViewWillPause:(VIMVideoPlayerView *)videoPlayerView;
 - (void)videoPlayerViewDidPause:(VIMVideoPlayerView *)videoPlayerView;
+- (void)videoPlayerViewPlaybackStalled:(VIMVideoPlayerView *)videoPlayerView;
 
 @end
 
