@@ -229,9 +229,20 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
 
 - (void)pause
 {
+    if (!self.isPlaying && self.player.rate == 0.0f) {
+        return;
+    }
+
+    if ([self.delegate respondsToSelector:@selector(videoPlayerWillPause:)]) {
+        [self.delegate videoPlayerWillPause:self];
+    }
+
     self.playing = NO;
-    
     [self.player pause];
+
+    if ([self.delegate respondsToSelector:@selector(videoPlayerDidPause:)]) {
+        [self.delegate videoPlayerDidPause:self];
+    }
 }
 
 - (void)seekToTime:(float)time

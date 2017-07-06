@@ -176,4 +176,20 @@
     }
 }
 
+- (void)videoPlayerWillPause:(VIMVideoPlayer *)videoPlayer
+{
+    if ([self.delegate respondsToSelector:@selector(videoPlayerViewWillPause:)])
+    {
+        [self.delegate videoPlayerViewWillPause:self];
+    }
+}
+
+- (void)videoPlayerDidPause:(VIMVideoPlayer *)videoPlayer
+{
+    if ([self.delegate respondsToSelector:@selector(videoPlayerViewDidPause:)])
+    {
+        [self.delegate videoPlayerViewDidPause:self];
+    }
+}
+
 @end

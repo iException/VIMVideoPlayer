@@ -41,6 +41,8 @@ static const float TimeUpdateInterval = 0.1f;
 - (void)videoPlayerPlaybackBufferEmpty:(VIMVideoPlayer *)videoPlayer;
 - (void)videoPlayerPlaybackLikelyToKeepUp:(VIMVideoPlayer *)videoPlayer;
 - (void)videoPlayer:(VIMVideoPlayer *)videoPlayer didFailWithError:(NSError *)error;
+- (void)videoPlayerWillPause:(VIMVideoPlayer *)videoPlayer;
+- (void)videoPlayerDidPause:(VIMVideoPlayer *)videoPlayer;
 
 @end
 

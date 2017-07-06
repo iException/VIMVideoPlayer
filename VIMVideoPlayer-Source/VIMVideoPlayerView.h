@@ -41,6 +41,8 @@
 - (void)videoPlayerViewPlaybackBufferEmpty:(VIMVideoPlayerView *)videoPlayerView;
 - (void)videoPlayerViewPlaybackLikelyToKeepUp:(VIMVideoPlayerView *)videoPlayerView;
 - (void)videoPlayerView:(VIMVideoPlayerView *)videoPlayerView didFailWithError:(NSError *)error;
+- (void)videoPlayerViewWillPause:(VIMVideoPlayerView *)videoPlayerView;
+- (void)videoPlayerViewDidPause:(VIMVideoPlayerView *)videoPlayerView;
 
 @end
 
