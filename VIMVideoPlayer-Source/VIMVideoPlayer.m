@@ -39,6 +39,8 @@ static void *VideoPlayer_PlayerItemPlaybackBufferEmpty = &VideoPlayer_PlayerItem
 static void *VideoPlayer_PlayerItemLoadedTimeRangesContext = &VideoPlayer_PlayerItemLoadedTimeRangesContext;
 
 NSString *const VIMVideoPlayerIsReadyToPlayNotification = @"VIMVideoPlayerIsReadyToPlay";
+NSString *const VIMVideoPlayerWillPauseNotification = @"VIMVideoPlayerWillPause";
+NSString *const VIMVideoPlayerDidPauseNotification = @"VIMVideoPlayerDidPause";
 NSString *const VIMVideoPlayerDidReachEndNotification = @"VIMVideoPlayerDidReachEnd";
 NSString *const VIMVideoPlayerTimeDidChangeNotification = @"VIMVideoPlayerTimeDidChange";
 NSString *const VIMVideoPlayerLoadedTimeRangeDidChangeNotification = @"VIMVideoPlayerLoadedTimeRangeDidChange";
@@ -237,12 +239,16 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
         [self.delegate videoPlayerWillPause:self];
     }
 
+    [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerWillPauseNotification object:self];
+
     self.playing = NO;
     [self.player pause];
 
     if ([self.delegate respondsToSelector:@selector(videoPlayerDidPause:)]) {
         [self.delegate videoPlayerDidPause:self];
     }
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:VIMVideoPlayerDidPauseNotification object:self];
 }
 
 - (void)seekToTime:(float)time

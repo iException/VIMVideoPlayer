@@ -93,6 +93,8 @@ static const float TimeUpdateInterval = 0.1f;
 @end
 
 FOUNDATION_EXPORT NSString *const VIMVideoPlayerIsReadyToPlayNotification;
+FOUNDATION_EXPORT NSString *const VIMVideoPlayerWillPauseNotification;
+FOUNDATION_EXPORT NSString *const VIMVideoPlayerDidPauseNotification;
 FOUNDATION_EXPORT NSString *const VIMVideoPlayerDidReachEndNotification;
 FOUNDATION_EXPORT NSString *const VIMVideoPlayerTimeDidChangeNotification;
 FOUNDATION_EXPORT NSString *const VIMVideoPlayerLoadedTimeRangeDidChangeNotification;
