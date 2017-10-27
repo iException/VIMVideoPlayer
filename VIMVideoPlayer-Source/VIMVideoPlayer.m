@@ -272,7 +272,7 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
-            [self.player seekToTime:cmTime completionHandler:^(BOOL finished) {
+            [self.player seekToTime:cmTime toleranceBefore:CMTimeMakeWithSeconds(1, NSEC_PER_SEC) toleranceAfter:CMTimeMakeWithSeconds(1, NSEC_PER_SEC) completionHandler:^(BOOL finished) {
                 
                 _isAtEndTime = NO;
                 _seeking = NO;
