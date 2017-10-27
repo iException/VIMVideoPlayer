@@ -92,6 +92,7 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
     {
         _volumeFadeDuration = DefaultVolumeFadeDuration;
         _playableBufferLength = DefaultPlayableBufferLength;
+        _timeUpdateInterval = 0.1f;
         
         [self setupPlayer];
         
@@ -684,7 +685,7 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
     }
     
     __weak typeof (self) weakSelf = self;
-    self.timeObserverToken = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(TimeUpdateInterval, NSEC_PER_SEC) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
+    self.timeObserverToken = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(self.timeUpdateInterval, NSEC_PER_SEC) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
         
         __strong typeof (self) strongSelf = weakSelf;
         if (!strongSelf)

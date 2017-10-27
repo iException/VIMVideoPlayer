@@ -29,8 +29,6 @@
 
 @class VIMVideoPlayer;
 
-static const float TimeUpdateInterval = 0.1f;
-
 @protocol VIMVideoPlayerDelegate <NSObject>
 
 @optional
@@ -56,6 +54,7 @@ static const float TimeUpdateInterval = 0.1f;
 @property (nonatomic, assign, getter=isPlaying, readonly) BOOL playing;
 @property (nonatomic, assign, getter=isLooping) BOOL looping;
 @property (nonatomic, assign, getter=isMuted) BOOL muted;
+@property (nonatomic, assign) NSTimeInterval timeUpdateInterval;
 
 - (void)setURL:(NSURL *)URL;
 - (void)setPlayerItem:(AVPlayerItem *)playerItem;
