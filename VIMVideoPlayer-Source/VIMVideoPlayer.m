@@ -207,6 +207,18 @@ NSString *const VIMVideoPlayerNotificationLoadedDurationKey = @"loadedDuration";
     return self.player.isMuted;
 }
 
+- (void)setTimeUpdateInterval:(NSTimeInterval)timeUpdateInterval
+{
+    if (timeUpdateInterval <= 0) {
+        _timeUpdateInterval = 0;
+        [self disableTimeUpdates];
+    } else {
+        _timeUpdateInterval = timeUpdateInterval;
+        [self disableTimeUpdates];
+        [self enableTimeUpdates];
+    }
+}
+
 #pragma mark - Playback
 
 - (void)play

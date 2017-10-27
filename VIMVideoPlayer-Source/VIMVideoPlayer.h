@@ -73,11 +73,6 @@
 - (void)disableAirplay;
 - (BOOL)isAirplayEnabled;
 
-// Time Updates
-
-- (void)enableTimeUpdates; // TODO: need these? no
-- (void)disableTimeUpdates;
-
 // Scrubbing
 
 - (void)startScrubbing;
